@@ -1,0 +1,469 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Book Tickets | SwiftBus</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  
+
+
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to right, DarkMagenta,DarkViolet,DarkOrchid );
+    }
+
+    header {
+      background-color: black;
+      padding: 23px 40px;
+     
+      margin-bottom: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: white;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .h{
+        color: white;
+    }
+
+    header h1 {
+      font-size: 24px;
+      margin: 0;
+    }
+
+    nav {
+      display: flex;
+      gap: 20px;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #ffdd57;
+    }
+
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 40px;
+      justify-content: center;
+      padding: 40px;
+    }
+
+    .form-section, .seat-section {
+      background: white;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      justify-content: center;
+    }
+
+    .form-section {
+      flex: 1 1 350px;
+    }
+
+    .seat-section {
+      flex: 1 1 400px;
+      text-align: center;
+    }
+
+    .form-section label {
+  font-size: 13px;
+  margin-top: 8px;
+}
+
+.form-section input,
+.form-section select {
+  font-size: 13px;
+  padding: 6px 8px;
+  margin-top: 4px;
+  border-radius: 4px;
+}
+
+
+    .form-section button {
+      width: 100%;
+      padding: 12px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      margin-top: 20px;
+      cursor: pointer;
+    }
+
+    .form-section button:hover {
+      background-color: #0056b3;
+    }
+
+    .seats-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .seat-row {
+      display: flex;
+      justify-content: center;
+      gap: 50px;
+    }
+
+    .seat-group {
+      display: flex;
+      gap: 10px;
+    }
+
+    .seat {
+      width: 40px;
+      height: 40px;
+      background-color: #28a745;
+      color: white;
+      font-weight: bold;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .seat.booked {
+      background-color: #dc3545;
+      cursor: not-allowed;
+    }
+
+    .seat.selected {
+      background-color: #ffc107;
+    }
+
+    
+
+    .image-gallery {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin: 40px auto;
+  flex-wrap: wrap;
+}
+
+.image-gallery img {
+  width: 180px;
+  height: 200px;
+  border-radius: 10px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+  object-fit: cover;
+}
+.img-card {
+  perspective: 1000px;
+}
+
+.img-card img {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transform-style: preserve-3d;
+}
+
+.img-card:hover img {
+  transform: rotateY(15deg) rotateX(10deg) scale(1.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+
+@media (max-width: 600px) {
+  .image-gallery img {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+#showSeatsBtn,
+#bookingForm button[type="submit"] {
+  width: fit-content;
+  padding: 8px 16px;
+  font-size: 14px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+#showSeatsBtn {
+  background-color: #28a745;
+}
+
+#showSeatsBtn:hover {
+  background-color: #218838;
+}
+
+#bookingForm button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+
+
+
+
+#summaryBox {
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: #f9f9ff;
+      border: 2px solid #007bff;
+      border-radius: 10px;
+      font-size: 15px;
+      color: #333;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      display: none;
+      transition: all 0.3s ease-in-out;
+    }
+
+    #summaryBox h3 {
+      margin-top: 0;
+      color: #007bff;
+      text-align: center;
+      font-size: 20px;
+    }
+
+    #summaryBox p {
+      margin: 6px 0;
+      line-height: 1.5;
+    }
+
+    #downloadPdfBtn {
+      background-color: #007bff;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      margin-top: 20px;
+      cursor: pointer;
+    }
+
+    #downloadPdfBtn:hover {
+      background-color: #0056b3;
+    }
+
+  </style>
+</head>
+<body>
+
+  <header>
+     <div style="display: flex; align-items: center; gap: 10px;">
+    <img src="bus9.jpg" alt="Bus Logo" style="height: 40px; background-color: #ffcc00; padding: 6px; border-radius: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.2);" />
+    <h1 style="margin: 0;">SwiftBus</h1>
+  </div>
+    <nav>
+      <a href="bus.html">Home</a>
+      <a href="login.html" style="color: darkorange;">Book</a>
+      <a href="aboutus.html">About us</a>
+      <a href="login.html">Login</a>
+      <a href="login.html">Logout</a>
+
+      <a href="register.html">Register</a>
+      
+      <form action="logout" method="POST" style="display:inline;">
+    <button type="submit" style="background: none; border: none; color: white; font-weight: bold; cursor: pointer;">
+      
+    </button>
+  </form>
+    </nav>
+  </header>
+  <div class="image-gallery">
+  <div class="img-card"><img src="bus1.jpg" alt="Luxury Bus" /></div>
+  <div class="img-card"><img src="bus2.jpg" alt="AC Sleeper" /></div>
+  <div class="img-card"><img src="bus3.png" alt="Seater Coach" /></div>
+  <div class="img-card"><img src="bus5.jpeg" alt="Luxury Coach" /></div>
+  <div class="img-card"><img src="bus6.jpg" alt="Comfortable Seats" /></div>
+  <div class="img-card"><img src="bus8.jpeg" alt="Luxury Bus" /></div>
+</div>
+
+
+<div class="container">
+  <!-- Booking Form -->
+  <div class="form-section">
+    <h2>Book Your Seat</h2>
+    <form id="bookingForm" action="bookTicket" method="POST">
+      <label for="source">Source City:</label>
+      <select id="source" name="source" required>
+        <option value="">Select Source</option>
+        <option value="chennai">Chennai</option>
+        <option value="coimbatore">Coimbatore</option>
+        <option value="madurai">Madurai</option>
+        <option value="trichy">Trichy</option>
+        <option value="kanyakumari">Kanyakumari</option>
+        <option value="erode">erode</option>
+        <option value="salem">salem</option>
+      </select>
+
+      <label for="destination">Destination City:</label>
+      <select id="destination" name="destination" required>
+        <option value="">Select Destination</option>
+        <option value="madurai">Madurai</option>
+        <option value="trichy">Trichy</option>
+        <option value="kanyakumari">Kanyakumari</option>
+        <option value="coimbatore">Coimbatore</option>
+        <option value="chennai">Chennai</option>
+        <option value="erode">Erode</option>
+        <option value="salem">Salem</option>
+      </select>
+
+      <label for="busType">Bus Type:</label>
+      <select id="busType" name="busType" required>
+        <option value="">Select Type</option>
+        <option value="AC">AC</option>
+        <option value="Non-AC">Non-AC</option>
+      </select>
+
+      <label for="busName">Bus Name:</label>
+      <select id="busName" name="busName" required>
+        <option value="">Select Bus</option>
+      </select>
+
+      <label for="busCategory">Bus Category:</label>
+      <select id="busCategory" name="busCategory" required>
+        <option value="">Select Category</option>
+        <option value="Seater">Seater</option>
+        <option value="Sleeper">Sleeper</option>
+      </select>
+
+      <label for="sourceDate">Travel Date:</label>
+      <input type="date" id="sourceDate" name="sourceDate" required>
+
+      <label for="pickupTime">Bus Time:</label>
+      <select id="pickupTime" name="pickupTime" required>
+        <option value="">Select Pickup Time</option>
+      </select>
+
+      <label for="seats">Seats to Book:</label>
+      <input type="number" id="seats" name="seats" min="1" max="30" required placeholder="Seats (1-30)">
+
+      <button type="button" id="showSeatsBtn" style="margin-top: 10px; background-color: #28a745;">
+        Select Seats
+      </button>
+
+      <label for="ticketPrice">Ticket Price (auto):</label>
+      <input type="number" id="ticketPrice" name="ticketPrice" readonly>
+      
+      <p><strong>Total Amount: ₹<span id="totalAmount">0</span></strong></p>
+
+      <button type="submit">Book Now</button>
+       
+    </form>
+  </div>
+</div>
+ <!-- Booking Summary -->
+<!-- Booking Summary -->
+<div id="summaryBox" style="display:none; margin-top:20px;" class="summary-box">
+  <h3>📑 Booking Summary</h3>
+  <p>From: <span id="sumSource"></span></p>
+  <p>To: <span id="sumDestination"></span></p>
+  <p>Date: <span id="sumDate"></span></p>
+  <p>Bus Type: <span id="sumBusType"></span></p>
+  <p>Bus Name: <span id="sumBusName"></span></p>
+  <p>Category: <span id="sumCategory"></span></p>
+  <p>Pickup Time: <span id="sumPickup"></span></p>
+  <p>Seats: <span id="sumSeats"></span></p>
+  <p>Total: ₹<span id="sumTotal"></span></p>
+
+  <button id="downloadPdfBtn">Download Ticket</button>
+</div>
+
+
+
+    <!-- Seat Layout -->
+    <div id="seatLayoutSection" style="display: none;">
+  <div class="seat-section">
+    <h2>Select Your Seats</h2>
+    <div id="seatsContainer" class="seats-container"></div>
+  </div>
+</div>
+
+</div>
+ 
+
+
+  <footer>
+        
+        
+    </footer>
+
+  <script src="book.js"></script>
+    
+<script>
+const selectedSeats = [];
+
+document.getElementById("bookingForm").addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  const seatCount = parseInt(document.getElementById("seats").value);
+  if (selectedSeats.length !== seatCount) {
+    alert(`Please select exactly ${seatCount} seat(s).`);
+    return;
+  }
+
+  const form = e.target;
+  const formData = new FormData(form);
+
+  fetch("bookTicket", {
+    method: "POST",
+    body: formData
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.status === "success") {
+      alert("✅ " + data.message);
+
+      document.getElementById("sumSource").textContent = form.source.value;
+      document.getElementById("sumDestination").textContent = form.destination.value;
+      document.getElementById("sumDate").textContent = form.sourceDate.value;
+      document.getElementById("sumBusType").textContent = form.busType.value;
+      document.getElementById("sumBusName").textContent = form.busName.value;
+      document.getElementById("sumCategory").textContent = form.busCategory.value;
+      document.getElementById("sumPickup").textContent = form.pickupTime.value;
+      document.getElementById("sumSeats").textContent = selectedSeats.join(", ");
+      document.getElementById("sumTotal").textContent = document.getElementById("totalAmount").textContent;
+
+      document.getElementById("summaryBox").style.display = "block";
+
+      // Clear selected seats visually
+      selectedSeats.forEach((id) => {
+        const seat = document.querySelector(`.seat[data-id="${id}"]`);
+        seat.classList.remove("selected");
+        seat.classList.add("booked");
+        seat.title = "Booked";
+      });
+      selectedSeats.length = 0;
+    } else {
+      alert("❌ " + data.message);
+    }
+  })
+  .catch(err => {
+    console.error(err);
+    alert("❌ Something went wrong.");
+  });
+});
+</script>
+
+
+
+
+  
+</body>
+</html>
