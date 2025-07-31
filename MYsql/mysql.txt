@@ -1,0 +1,35 @@
+CREATE DATABASE  swiftbus;
+USE swiftbus;
+
+CREATE TABLE  users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  fullname VARCHAR(100) NOT NULL,
+  email VARCHAR(100) NOT NULL UNIQUE,
+  phone VARCHAR(15) NOT NULL,
+  username VARCHAR(50) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE bookings (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50),
+    source VARCHAR(50),
+    destination VARCHAR(50),
+    bus_type VARCHAR(20),
+    bus_name VARCHAR(100),
+    bus_category VARCHAR(50),
+    travel_date DATE,
+    pickup_time VARCHAR(20),
+    seats INT,
+    ticket_price DECIMAL(10,2),
+    total_amount INT,
+    booked_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+select*from users;
+select*from  bookings;
+
+ALTER TABLE bookings
+drop column seat_numbers;
+delete from bookings where id=56;
+show tables;
