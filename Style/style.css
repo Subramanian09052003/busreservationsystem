@@ -1,0 +1,146 @@
+/* Reset & Base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background: url('bus2.jpg') no-repeat center center fixed;
+  background-size: cover;
+  color: white;
+  line-height: 1.6;
+}
+
+
+
+/* Header & Navigation */
+header {
+  background-color: black;
+  padding: 30px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+  font-size: 23px;
+  margin: 0;
+}
+
+nav {
+  display: flex;
+  gap: 20px;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s;
+  display: inline-block;
+}
+
+
+
+
+nav a:hover {
+  color: #ffdd57;
+
+}
+
+
+
+
+
+/* Hero Section */
+.hero {
+  text-align: center;
+  padding: 40px 20px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 12px;
+  margin: 50px auto;
+  max-width: 800px;
+}
+
+.hero h2 {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.hero p {
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.cta {
+  display: inline-block;
+  padding: 12px 24px;
+  background: #28a745;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.cta:hover {
+  background: #218838;
+}
+
+/* Routes Section */
+.routes {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin: 50px auto;
+  max-width: 800px;
+  color: #333;
+}
+
+.routes h3 {
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #007bff;
+  text-align: center;
+}
+
+.routes ul {
+  list-style: none;
+  padding: 0;
+}
+
+.routes li {
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+  font-size: 18px;
+}
+
+.routes li:hover {
+    transition: transform 0.3s ease;
+
+      transform: scale(1.1);
+      color: purple;
+    }
+     
+/* Footer */
+footer {
+  text-align: center;
+  margin-top: 50px;
+  font-size: 14px;
+  color: white;
+}
+
+footer div a img, footer div a i {
+  transition: transform 0.3s ease;
+}
+
+footer div a:hover img, footer div a:hover i {
+  transform: scale(1.2); /* Slight zoom effect on hover */
+}
